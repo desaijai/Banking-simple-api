@@ -1,5 +1,6 @@
 package com.mongobank.bankingSys.controller;
 
+import com.mongobank.bankingSys.exception.resourceNotFound;
 import com.mongobank.bankingSys.model.Bank;
 import com.mongobank.bankingSys.repository.bankRepo;
 import com.mongobank.bankingSys.service.bankService;
@@ -24,7 +25,7 @@ public class bankController {
     bankRepo repo;
 
     @PostMapping(consumes = {"application/json"})
-    public ResponseEntity<Bank> InsertBank(@RequestBody Bank bank) {
+    public ResponseEntity<Bank> InsertBank(@RequestBody Bank bank)throws resourceNotFound {
         return new ResponseEntity<>(service.saveBank(bank), HttpStatus.CREATED);
     }
 

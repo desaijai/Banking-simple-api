@@ -1,6 +1,7 @@
 package com.mongobank.bankingSys.service.serviceImplements;
 
 import com.mongobank.bankingSys.exception.resourceNotFound;
+import com.mongobank.bankingSys.helper.fileUploader;
 import com.mongobank.bankingSys.helper.idGenerator;
 import com.mongobank.bankingSys.model.Bank;
 import com.mongobank.bankingSys.model.accountHolder;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,9 +33,13 @@ public class bankServiceImpl implements bankService {
     @Autowired
     private accounttRepo atrepo;
 
+    @Autowired
+    private fileUploader fu;
+
     @Override
     public Bank saveBank(Bank bank) {
-        bank.setBid(idGenerator.next());
+        String keygen = idGenerator.next();
+        bank.setBid(idGenerator.next().replaceAll("-", ""));
         bank.getAHolder().setUid(seqService.generator(accountHolder.ACCOUNTGENERATEID));
         bank.getAHolder().setUAccountNumber(generateAccountNumber.generatorANumber(bank.getBankName(), 1, bank.getAHolder().getUid()));
 
@@ -78,7 +85,7 @@ public class bankServiceImpl implements bankService {
     @Override
     public List<Bank> saveBulkBank(List<Bank> banks) {
 
-        banks.forEach((element)->{
+        banks.forEach((element) -> {
             element.setBid(idGenerator.next());
             element.getAHolder().setUid(seqService.generator(accountHolder.ACCOUNTGENERATEID));
             element.getAHolder().setUAccountNumber(generateAccountNumber.generatorANumber(element.getBankName(), 1, element.getAHolder().getUid()));
