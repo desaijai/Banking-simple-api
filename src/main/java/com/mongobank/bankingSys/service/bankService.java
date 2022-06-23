@@ -24,4 +24,6 @@ public interface bankService {
 
     public Page<Bank> findByPagination(int pageNo,int size);
 
+    public List<Bank> saveBulkBank(List<Bank> banks);
+
 }

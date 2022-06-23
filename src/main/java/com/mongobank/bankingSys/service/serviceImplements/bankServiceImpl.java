@@ -71,7 +71,24 @@ public class bankServiceImpl implements bankService {
 
     @Override
     public Page<Bank> findByPagination(int pageNo, int size) {
-        Pageable pageable= PageRequest.of(pageNo-1,size);
+        Pageable pageable = PageRequest.of(pageNo - 1, size);
         return repo.findAll(pageable);
+    }
+
+    @Override
+    public List<Bank> saveBulkBank(List<Bank> banks) {
+
+        banks.forEach((element)->{
+            element.setBid(idGenerator.next());
+            element.getAHolder().setUid(seqService.generator(accountHolder.ACCOUNTGENERATEID));
+            element.getAHolder().setUAccountNumber(generateAccountNumber.generatorANumber(element.getBankName(), 1, element.getAHolder().getUid()));
+
+            element.getAHolder().getAccountTypes().
+                    forEach((e) -> {
+                        e.setAccTypeId(seqService.generator(accountType.GENERATEKEY));
+                    });
+        });
+
+        return repo.saveAll(banks);
     }
 }

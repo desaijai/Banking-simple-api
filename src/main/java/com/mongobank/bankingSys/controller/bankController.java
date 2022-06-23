@@ -35,7 +35,7 @@ public class bankController {
 
     @GetMapping(value = "{bid}", produces = {"application/json"})
     public Bank getBankById(@PathVariable("bid") int bid) {
-        return service.getBankById(bid);
+            return service.getBankById(bid);
     }
 
     @DeleteMapping("{bid}")
@@ -89,6 +89,11 @@ public class bankController {
         int pageSize=5;
         Page<Bank> page=service.findByPagination(pageNo,pageSize);
         return page.getContent();
+    }
+
+    @PostMapping("/bulk")
+    public ResponseEntity<List<Bank>> saveBulk(@RequestBody List<Bank> banks){
+        return new ResponseEntity<>(service.saveBulkBank(banks),HttpStatus.OK);
     }
 
 }
